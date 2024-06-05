@@ -2,6 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key}) {
     print("MyHomePage constructor is called");
@@ -30,7 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ToggleWidget(),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, 'statefulDeeperPage');
+                  // Navigator.pushNamed(context, 'statefulDeeperPage');
+                  setState(() {});
                 },
                 child: Text("Go to stateful page")),
             SizedBox(height: 200, child: Container()),
@@ -50,6 +65,11 @@ class ToggleWidget extends StatefulWidget {
 }
 
 class _ToggleWidgetState extends State<ToggleWidget> {
+  @override
+  void didUpdateWidget(covariant ToggleWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
   var _isShowText = false;
   @override
   Widget build(BuildContext context) {
