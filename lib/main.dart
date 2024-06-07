@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
+    return MaterialApp(
       home: SplashPage(),
 
       // onGenerateRoute: (RouteSettings setting) {

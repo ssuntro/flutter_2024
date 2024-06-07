@@ -34,19 +34,19 @@ class _MainNewsPageState extends State<MainNewsPage> {
         status: NewsStatus.responsed,
         thumbnail: 'assets/images/animal.jpeg'),
     News(
-        title: "title4",
+        title: "title6",
         status: NewsStatus.responsed,
         thumbnail: "assets/images/global_warming.jpeg"),
     News(
-        title: "title5",
+        title: "title7",
         status: NewsStatus.responsed,
         thumbnail: 'assets/images/animal.jpeg'),
     News(
-        title: "title4",
+        title: "title8",
         status: NewsStatus.responsed,
         thumbnail: "assets/images/global_warming.jpeg"),
     News(
-        title: "title5",
+        title: "title9",
         status: NewsStatus.responsed,
         thumbnail: 'assets/images/animal.jpeg')
   ];
@@ -58,14 +58,14 @@ class _MainNewsPageState extends State<MainNewsPage> {
     final aa = model.map((elem) => buildListItem(elem));
     return CupertinoPageScaffold(
         navigationBar: buildNavBar(),
-        child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
-            return buildListItem(model[index]);
-          },
-          itemCount: aa.length,
-          // onReorder: onReorder
-          // children: aa.toList()
-        ));
+        child: ReorderableListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return buildListItem(model[index]);
+            },
+            itemCount: aa.length,
+            onReorder: onReorder
+            // children: aa.toList()
+            ));
   }
 
   void onReorder(int oldIndex, int newIndex) {
