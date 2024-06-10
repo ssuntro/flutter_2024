@@ -33,35 +33,43 @@ List<News> get fetchNews {
       title: "title1",
       status: NewsStatus.closed,
       category: NewsCategory.animal,
+      body: '',
+      url: '',
     ),
     News(
       title: "title2",
       status: NewsStatus.pendingResponse,
       category: NewsCategory.unknown,
+      body: '',
+      url: '',
     ),
     News(
       title: "title3",
       status: NewsStatus.responsed,
       category: NewsCategory.finance,
+      body: '',
+      url: '',
     ),
     News(
       title: "title4",
       status: NewsStatus.responsed,
       category: NewsCategory.finance,
+      body: '',
+      url: '',
     ),
     News(
       title: "title5",
       status: NewsStatus.responsed,
       category: NewsCategory.finance,
+      body: '',
+      url: '',
     ),
   ];
 }
 
 class _MyPageState extends State<MyPage> {
   var model = fetchNews;
-  StatefulWidget a = Column(
-    children: [Text("")],
-  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
