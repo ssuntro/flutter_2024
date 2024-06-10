@@ -1,7 +1,9 @@
+import 'package:day_1/add_news_page.dart';
 import 'package:day_1/const_stf_widget.dart';
 import 'package:day_1/models/news.dart';
 import 'package:day_1/models/news_category.dart';
 import 'package:day_1/models/news_status.dart';
+import 'package:day_1/news_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,50 +15,34 @@ class MainNewsPage extends StatefulWidget {
   State<MainNewsPage> createState() => MainNewsPageState();
 }
 
-class MainNewsPageState extends State<MainNewsPage>
-    with WidgetsBindingObserver {
-  final model = <News>[
+List<News> get fetchNewsList {
+  return <News>[
     News(
       title: "title1",
       status: NewsStatus.closed,
       category: NewsCategory.animal,
+      body: '',
+      url: '',
     ),
     News(
       title: "title2",
       status: NewsStatus.pendingResponse,
       category: NewsCategory.unknown,
-    ),
-    News(
-      title: "title3",
-      status: NewsStatus.responsed,
-      category: NewsCategory.finance,
-    ),
-    News(
-      title: "title4",
-      status: NewsStatus.responsed,
-      category: NewsCategory.international,
-    ),
-    News(
-      title: "title5",
-      status: NewsStatus.responsed,
-      category: NewsCategory.animal,
-    ),
-    News(
-      title: "title6",
-      status: NewsStatus.responsed,
-      category: NewsCategory.international,
-    ),
-    News(
-      title: "title7",
-      status: NewsStatus.responsed,
-      category: NewsCategory.animal,
+      body: '',
+      url: '',
     ),
   ];
+}
+
+class MainNewsPageState extends State<MainNewsPage>
+    with WidgetsBindingObserver {
+  var model = fetchNewsList;
 
   var _isReorderEnabled = false;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    NewsList.fetchAPI().then((value) => print("NewsList.fetchAPI: $value"));
     super.initState();
   }
 
@@ -96,6 +82,12 @@ class MainNewsPageState extends State<MainNewsPage>
 
     final News element = model.removeAt(oldIndex);
     model.insert(newIndex, element);
+  }
+
+  void onNewsAdded(News news) {
+    setState(() {
+      model.add(news);
+    });
   }
 }
 
@@ -166,11 +158,30 @@ extension RenderExtension on MainNewsPageState {
 
   CupertinoNavigationBar buildNavBar() {
     return CupertinoNavigationBar(
-        middle: Text("Home"),
+        middle: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                model = fetchNewsList;
+              });
+            },
+            child: Text("Refresh")),
         backgroundColor: Colors.amber,
         leading: IconButton(
             onPressed: () {
-              setState(() {});
+              showGeneralDialog(
+                  context: context,
+                  pageBuilder: (context, anim1, anim2) {
+                    return AddNewsPage(
+                      onButtonDidClick: onNewsAdded,
+                    );
+                  },
+                  transitionBuilder: (c, a1, a2, child) {
+                    return SlideTransition(
+                      position: Tween(begin: Offset(0, 1), end: Offset(0, 0))
+                          .animate(a1),
+                      child: child,
+                    );
+                  });
             },
             icon: Icon(Icons.add)),
         trailing: ElevatedButton(
