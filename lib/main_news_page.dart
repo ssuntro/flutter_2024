@@ -1,12 +1,11 @@
 import 'package:day_1/add_news_page.dart';
-import 'package:day_1/const_stf_widget.dart';
 import 'package:day_1/models/news.dart';
 import 'package:day_1/models/news_category.dart';
 import 'package:day_1/models/news_status.dart';
-import 'package:day_1/news_list.dart';
+import 'package:day_1/news_list_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class MainNewsPage extends StatefulWidget {
   const MainNewsPage({super.key});
@@ -15,42 +14,43 @@ class MainNewsPage extends StatefulWidget {
   State<MainNewsPage> createState() => MainNewsPageState();
 }
 
-List<News> get fetchNewsList {
-  return <News>[
-    News(
-      title: "title1",
-      status: NewsStatus.closed,
-      category: NewsCategory.animal,
-      body: '',
-      url: '',
-    ),
-    News(
-      title: "title2",
-      status: NewsStatus.pendingResponse,
-      category: NewsCategory.unknown,
-      body: '',
-      url: '',
-    ),
-  ];
-}
+// List<News> get fetchNewsList {
+//   return <News>[
+//     News(
+//       title: "title1",
+//       status: NewsStatus.closed,
+//       category: NewsCategory.animal,
+//       body: '',
+//       url: '',
+//     ),
+//     News(
+//       title: "title2",
+//       status: NewsStatus.pendingResponse,
+//       category: NewsCategory.unknown,
+//       body: '',
+//       url: '',
+//     ),
+//   ];
+// }
 
 class MainNewsPageState extends State<MainNewsPage>
     with WidgetsBindingObserver {
-  var model = <News>[];
+  // var model = <News>[];
 
   var _isReorderEnabled = false;
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     fetchNews();
     super.initState();
   }
 
   Future<void> fetchNews() async {
-    final newValue = await NewsList.fetchAPI();
-    setState(() {
-      model = newValue;
-    });
+    Provider.of<NewsListProvider>(context, listen: false).fetchAPI();
+
+    // final newValue = await NewsList.fetchAPI();
+    // setState(() {
+    //   model = newValue;
+    // });
 
     // return NewsList.fetchAPI().then((value) {
     //   setState(() {
@@ -64,20 +64,25 @@ class MainNewsPageState extends State<MainNewsPage>
     // var a = new List<int>.generate(10, (index) => index + 1)
     // .map((elem) => Text("$elem"));
 
-    final aa = model.map((elem) => buildListItem(elem));
+    // final aa = Provider.of<NewsListProvider>(context, listen: false)
+    //     .items
+    //     .map((elem) => buildListItem(elem));
     return CupertinoPageScaffold(
         navigationBar: buildNavBar(),
         child: SafeArea(
           child: RefreshIndicator(
             onRefresh: () => fetchNews(),
-            child: ReorderableListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return buildListItem(model[index]);
-                },
-                itemCount: aa.length,
-                onReorder: onReorder
-                // children: aa.toList()
-                ),
+            child: Consumer<NewsListProvider>(
+              builder: (context, provider, child) =>
+                  ReorderableListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildListItem(provider.items[index]);
+                      },
+                      itemCount: provider.items.length,
+                      onReorder: onReorder
+                      // children: aa.toList()
+                      ),
+            ),
           ),
         ));
   }
@@ -86,20 +91,15 @@ class MainNewsPageState extends State<MainNewsPage>
     if (!_isReorderEnabled) {
       return;
     }
-    if (oldIndex < newIndex) {
-      // removing the item at oldIndex will shorten the list by 1.
-      newIndex -= 1;
-    }
-
-    final News element = model.removeAt(oldIndex);
-    model.insert(newIndex, element);
+    Provider.of<NewsListProvider>(context, listen: false)
+        .onReorder(oldIndex, newIndex);
   }
 
-  void onNewsAdded(News news) {
-    setState(() {
-      model.add(news);
-    });
-  }
+  // void onNewsAdded(News news) {
+  //   setState(() {
+  //     model.add(news);
+  //   });
+  // }
 }
 
 extension RenderExtension on MainNewsPageState {
@@ -180,9 +180,7 @@ extension RenderExtension on MainNewsPageState {
               showGeneralDialog(
                   context: context,
                   pageBuilder: (context, anim1, anim2) {
-                    return AddNewsPage(
-                      onButtonDidClick: onNewsAdded,
-                    );
+                    return AddNewsPage();
                   },
                   transitionBuilder: (c, a1, a2, child) {
                     return SlideTransition(

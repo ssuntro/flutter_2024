@@ -1,7 +1,9 @@
 import 'package:day_1/main_news_page.dart';
+import 'package:day_1/news_list_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

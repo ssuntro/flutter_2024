@@ -1,12 +1,14 @@
 import 'package:day_1/models/news.dart';
 import 'package:day_1/models/news_category.dart';
 import 'package:day_1/models/news_status.dart';
+import 'package:day_1/news_list_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddNewsPage extends StatelessWidget {
-  final void Function(News) onButtonDidClick;
-  AddNewsPage({super.key, required this.onButtonDidClick});
+  // final void Function(News) onButtonDidClick;
+  AddNewsPage({super.key});
 
   final model = News(
       title:
@@ -66,7 +68,8 @@ class AddNewsPage extends StatelessWidget {
         ),
         ElevatedButton(
             onPressed: () {
-              onButtonDidClick(model);
+              Provider.of<NewsListProvider>(context, listen: false)
+                  .addNews(model);
               Navigator.of(context).pop();
             },
             child: Text("Add"))
