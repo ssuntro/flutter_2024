@@ -36,19 +36,27 @@ List<News> get fetchNewsList {
 
 class MainNewsPageState extends State<MainNewsPage>
     with WidgetsBindingObserver {
-  var model = fetchNewsList;
+  var model = <News>[];
 
   var _isReorderEnabled = false;
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    NewsList.fetchAPI().then((value) => print("NewsList.fetchAPI: $value"));
+    fetchNews();
     super.initState();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
+  Future<void> fetchNews() async {
+    final newValue = await NewsList.fetchAPI();
+    setState(() {
+      model = newValue;
+    });
+
+    // return NewsList.fetchAPI().then((value) {
+    //   setState(() {
+    //     model = value;
+    //   });
+    // });
   }
 
   @override
@@ -60,14 +68,17 @@ class MainNewsPageState extends State<MainNewsPage>
     return CupertinoPageScaffold(
         navigationBar: buildNavBar(),
         child: SafeArea(
-          child: ReorderableListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return buildListItem(model[index]);
-              },
-              itemCount: aa.length,
-              onReorder: onReorder
-              // children: aa.toList()
-              ),
+          child: RefreshIndicator(
+            onRefresh: () => fetchNews(),
+            child: ReorderableListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  return buildListItem(model[index]);
+                },
+                itemCount: aa.length,
+                onReorder: onReorder
+                // children: aa.toList()
+                ),
+          ),
         ));
   }
 
@@ -160,9 +171,7 @@ extension RenderExtension on MainNewsPageState {
     return CupertinoNavigationBar(
         middle: ElevatedButton(
             onPressed: () {
-              setState(() {
-                model = fetchNewsList;
-              });
+              fetchNews();
             },
             child: Text("Refresh")),
         backgroundColor: Colors.amber,

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-enum NewsStatus { closed, responsed, pendingResponse }
+enum NewsStatus { closed, responsed, pendingResponse, unknown }
 
 extension NewsStatusExtension on NewsStatus {
   String get rawValue {
@@ -10,7 +10,9 @@ extension NewsStatusExtension on NewsStatus {
       case NewsStatus.pendingResponse:
         return "pending response";
       case NewsStatus.responsed:
-        return "responsed";
+        return "responded";
+      case NewsStatus.unknown:
+        return "unknown";
       default:
         return "n/a";
     }
