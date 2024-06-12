@@ -1,6 +1,5 @@
-# day_1
+#Mobile development with Flutter(4 Days)
 
-A new Flutter project.
 
 ## Getting Started
 
