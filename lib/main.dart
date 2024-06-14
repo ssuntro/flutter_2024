@@ -1,4 +1,5 @@
 import 'package:day_1/news_list_provider.dart';
+import 'package:day_1/news_page.dart';
 import 'package:day_1/splash_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
         value: NewsListProvider(),
         child: MaterialApp(
           home: SplashPage(),
+          routes: {
+            NewsPage.routeName: (ctx) => const NewsPage(),
+          },
         ));
 
     // onGenerateRoute: (RouteSettings setting) {

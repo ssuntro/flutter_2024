@@ -3,6 +3,7 @@ import 'package:day_1/models/news.dart';
 import 'package:day_1/models/news_category.dart';
 import 'package:day_1/models/news_status.dart';
 import 'package:day_1/news_list_provider.dart';
+import 'package:day_1/news_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,7 +137,9 @@ extension RenderExtension on MainNewsPageState {
               padding: const EdgeInsets.all(0),
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.zero))),
-          onPressed: () {},
+          onPressed: () {
+            onTileDidClick(item.title);
+          },
           child: Row(
             children: [
               Image.asset(item.category.imagePath),
@@ -199,5 +202,15 @@ extension RenderExtension on MainNewsPageState {
           },
           child: Text("Reorder"),
         ));
+  }
+}
+
+extension PageInteraction on MainNewsPageState {
+  void onTileDidClick(String title) {
+    final selectedNews = Provider.of<NewsListProvider>(context, listen: false)
+        .items
+        .firstWhere((elem) => elem.title == title);
+    Navigator.of(context)
+        .pushNamed(NewsPage.routeName, arguments: {'news': selectedNews});
   }
 }
