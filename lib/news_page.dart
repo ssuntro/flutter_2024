@@ -1,9 +1,36 @@
 import 'package:day_1/models/news.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class NewsPage extends StatelessWidget {
+class NewsPage extends StatefulWidget {
   static const routeName = 'news-page';
+  static const platform = MethodChannel('samples.flutter.dev/battery');
+
   const NewsPage({super.key});
+
+  @override
+  State<NewsPage> createState() => _NewsPageState();
+}
+
+class _NewsPageState extends State<NewsPage> {
+  Future<void> _getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      final int result =
+          await NewsPage.platform.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Battery level at $result % .';
+    } on PlatformException catch (e) {
+      batteryLevel = "Failed to get battery level: '${e.message}'.";
+    }
+
+    print("batteryLevel: $batteryLevel");
+  }
+
+  @override
+  void initState() {
+    _getBatteryLevel();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

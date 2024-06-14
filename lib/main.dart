@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           home: SplashPage(),
           routes: {
-            NewsPage.routeName: (ctx) => const NewsPage(),
+            NewsPage.routeName: (ctx) => NewsPage(),
           },
         ));
 
