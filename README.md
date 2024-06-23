@@ -3,7 +3,7 @@
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project serves as the starting point for a Flutter application, intended to be developed over four days as a side project for both development and learning purposes.
 
 A few resources to get you started if this is your first Flutter project:
 
